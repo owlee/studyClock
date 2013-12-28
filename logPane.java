@@ -18,7 +18,7 @@ public class logPane extends JPanel implements ActionListener{
 	private String subject = "null";
 	private counterPane counter;
 	private loggerIO logger;
-	private ArrayList<logSession> list = loggerIO.session;
+	private ArrayList<logSession> session;
 	
 	
 	public logPane(counterPane ct, int w, int h, Color bgC, Color stringC){
@@ -46,8 +46,33 @@ public class logPane extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		g.setColor(stringColor);
 		//g.drawString(subject, 0, 100);
+		//drawLast(3, g);
+	}
+	
+	public void drawLast(int num, Graphics g){
 		updateList();
-		g.drawString(list.get(0).getSubject() + "        " + list.get(0).getRuntime(), 4, 95);
+		int count = 1;
+		int size = session.size();
+		int x = 4, y = 95;
+		String build = "";
+		//checks for nullpoints
+		if(size == 0){	//if there isn't values in the log, skip the drawing.
+			count = num + 1;
+		} else if(num > size) {	//if num is greater than the size, draw anything that is available.
+			num = size;
+		}
+		//builds a session string/ resets build/ next value/ draws at lower location
+		while(count <= num){
+			build += session.get(size-count).getSubject() + "  " + session.get(size-count).getRuntime();
+			g.drawString(build, x, y);
+			build = "";
+			count++;
+			y-=12;
+		}
+	}
+	
+	public void updateList(){
+		session = logger.getLogSessions();
 	}
 	
 	public void actionPerformed(ActionEvent arg0){
@@ -57,7 +82,7 @@ public class logPane extends JPanel implements ActionListener{
 			counter.setSubject(subject);
 			counter.repaint();
 		} else if(log == event){
-			logger.log(counter.getRuntime(), subject);
+			logger.log(subject, counter.getRuntime());
 		}
 	}
 	
@@ -65,7 +90,4 @@ public class logPane extends JPanel implements ActionListener{
 		return subject;
 	}
 	
-	public void updateList(){
-		logger.reportLog();
-	}
 }
