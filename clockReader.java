@@ -10,10 +10,10 @@ public class clockReader {
 	
 	public clockReader(){ }
 
-	public void openFile(String path){
+	public void openFile(File name){
 		//opens the file and uses commas as a delimiter
 		try{
-			sc = new Scanner(path);
+			sc = new Scanner(name);
 			sc.useDelimiter(",");
 		} catch(Exception e) {
 			e.printStackTrace();

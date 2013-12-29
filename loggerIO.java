@@ -7,16 +7,21 @@ public class loggerIO {
 	
 	//public String getCurr = System.getProperty("user.dir");
 	//public File fileName = new File(getCurr + "/log_session.txt");
-	public String fileName = new String("log_Session.txt");
-	private clockWriter writer;
-	private clockReader reader;
+	public File fileName = new File("log_Session.txt");
+	private clockWriter writer = new clockWriter();
+	private clockReader reader = new clockReader();
 	
 	public loggerIO() { }
 	
 	public void log(String subj, int time){
-		writer.openFile(fileName);
-		writer.add(subj, time);
-		writer.close();
+		try{
+			writer.openFile(fileName);
+			writer.add(subj, time);
+			writer.close();
+		} catch(Exception e) {
+			System.out.println("Something happened during the log call in loggerIO");
+			e.printStackTrace();
+		}
 	}
 	
 	public ArrayList<logSession> getLogSessions(){

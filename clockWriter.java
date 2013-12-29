@@ -5,24 +5,37 @@ import java.util.*;
 
 public class clockWriter {
 	
-	private Formatter f;
+	private FileWriter fw;
 	
 	public clockWriter(){}
 	
-	public void openFile(String name){
+	public void openFile(File name) throws IOException{
+		if(!name.exists()){
+			name.createNewFile();
+			System.out.println("Created a new file: " + name.getName());
+		}
+		
 		try{
-			f = new Formatter(name);
-			System.out.println("File created");
+			fw = new FileWriter(name);
 		} catch(Exception e){
-			System.out.println("unable to create file or find file.");
+			e.printStackTrace();
 		}
 	}
 	
 	public void add(String subj, int time){
-		f.format("%s,%d", subj, time);
+		try{
+			//the "," is used as a delimiter
+			fw.write(subj + "," + time);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void close(){
-		f.close();
+		try{
+			fw.close();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }
