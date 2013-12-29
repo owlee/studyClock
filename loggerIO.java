@@ -5,22 +5,24 @@ import java.util.*;
 
 public class loggerIO {
 	
-	public static String getCurr = System.getProperty("user.dir");
-	public static File fileName = new File(getCurr + "/log_session.txt");
-	
+	//public String getCurr = System.getProperty("user.dir");
+	//public File fileName = new File(getCurr + "/log_session.txt");
+	public String fileName = new String("log_Session.txt");
 	private clockWriter writer;
 	private clockReader reader;
 	
-	public loggerIO() {
-		//todo: add input to filename
-	}
+	public loggerIO() { }
 	
 	public void log(String subj, int time){
-		writer.write(subj, time);
+		writer.openFile(fileName);
+		writer.add(subj, time);
+		writer.close();
 	}
 	
 	public ArrayList<logSession> getLogSessions(){
-		reader.reportLog();
+		reader.openFile(fileName);
+		reader.read();
+		reader.close();
 		return reader.getLogSession();
 	}
 }

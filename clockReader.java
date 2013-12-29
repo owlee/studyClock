@@ -1,7 +1,6 @@
 package studyClock;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
 public class clockReader {
@@ -9,39 +8,31 @@ public class clockReader {
 	private Scanner sc;
 	private static ArrayList<logSession> session = new ArrayList<logSession>();
 	
-	public clockReader(){
-		
-	}
-	
-	public void reportLog(){ //places logSessions in an ArrayList
-		try {
-			sc = new Scanner(new FileReader(loggerIO.fileName));
-			while(sc.hasNext()){
-				processLine(sc.nextLine());
-			}
-			sc.close();
-		} catch (FileNotFoundException e) {
+	public clockReader(){ }
+
+	public void openFile(String path){
+		//opens the file and uses commas as a delimiter
+		try{
+			sc = new Scanner(path);
+			sc.useDelimiter(",");
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void processLine(String str){
-		boolean integer = false;
-		StringTokenizer st = new StringTokenizer(str, ",", false);
-		int runtime = 0;
-		String subject = "";
-		while(st.hasMoreElements()){
-			if(integer){
-				runtime = Integer.parseInt(st.nextToken());
-				integer = false;
-			} else {
-				subject = st.nextToken();
-				integer = true;
-			}
+	public void read(){
+		//reads file and adds to the arrayList of sessions;
+		while(sc.hasNext()){
+			String s = sc.next();
+			int n = sc.nextInt();
+			session.add(new logSession(s,n));
 		}
-		session.add(new logSession(subject, runtime));
 	}
 	
+	public void close(){
+		sc.close();
+	}
+
 	public ArrayList<logSession> getLogSession(){
 		return session;
 	}
